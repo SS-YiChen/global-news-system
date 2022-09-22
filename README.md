@@ -1,2 +1,2 @@
-# global-news-system
+# Global-News-Management
 react-antd and json-server
