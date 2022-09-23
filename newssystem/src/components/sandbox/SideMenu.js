@@ -60,9 +60,7 @@ const iconList = {
 
 export default function SideMenu() {
 
-    const [collapsed, setCollapsed] = useState(false)
     const [menu, setMenu] = useState([])
-
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -74,8 +72,10 @@ export default function SideMenu() {
                 })
     }, [])
 
+    const {role:{rights}} = JSON.parse(localStorage.getItem('token'))
+
     const checkPagePermission = item => {
-        return item.pagepermisson
+        return item.pagepermisson && rights.includes(item.key)
     }
 
     const renderMenu = (menuList) => {
@@ -105,7 +105,7 @@ export default function SideMenu() {
     return (
         <Sider trigger={null} collapsible collapsed={false} >
             <div style={{display:"flex", height:"100%", flexDirection: "column "}}>
-            <div className="logo">Global News Release Management</div>
+            <div className="logo">Global News Publish Management</div>
             <div style={{flex:1, overflow:"auto"}}>
             <Menu
                 theme="dark"

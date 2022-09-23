@@ -5,21 +5,34 @@ import {
 } from '@ant-design/icons';
 import { Layout, Dropdown, Menu, Avatar } from 'antd';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const { Header } = Layout;
 
 export default function TopHeader() {
 
     const [collapsed, setCollapsed] = useState(false);
+    const navigate = useNavigate()
 
     const changeCollapsed = () => {
         setCollapsed(!collapsed);
     }
 
+    const onClick = (item) => {
+        //console.log(item.key);
+        if (item.key * 1 === 2) {
+            localStorage.removeItem("token")
+            navigate('/login')
+        }
+    };
+
+    const {role:{roleName}, username} = JSON.parse(localStorage.getItem('token'))
+
     const menu = (
-        <Menu
+        <Menu onClick={onClick}
             items={[
                 {
-                    label: 'Administrator',
+                    label: `${roleName}`,
                     key: '1',
                 },
                 {
@@ -44,9 +57,9 @@ export default function TopHeader() {
             }
 
             <div style={{ float: 'right' }}>
-                <span>Welcome xxx back!</span>
+                <span> Welcome <span style={{color:'#1890ff'}}>{username}</span> back! </span>
                 <Dropdown overlay={menu}>
-                <Avatar size="large" icon={<UserOutlined />} />
+                    <Avatar size="large" icon={<UserOutlined />} />
                 </Dropdown>
             </div>
         </Header>
