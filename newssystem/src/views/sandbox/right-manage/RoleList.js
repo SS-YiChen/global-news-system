@@ -1,7 +1,6 @@
 import {
     Button,
     Table,
-    Tag,
     Modal,
     Tree,
 } from 'antd'
@@ -20,7 +19,8 @@ export default function RoleList() {
     const [dataSource, setDataSource] = useState([])
     const [rightList, setRightList] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [currentId, setCurrentId] = useState([])
+    const [currentRights, setCurrentRights] = useState([]);
     const columns = [
         {
             title: 'ID',
@@ -48,7 +48,11 @@ export default function RoleList() {
                             type="primary"
                             shape="circle"
                             icon={<EditOutlined />}
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                                setIsModalOpen(true)
+                                setCurrentRights(item.rights)
+                                setCurrentId(item.id)
+                            } }
                         />
                     </div>
                 )
@@ -97,12 +101,32 @@ export default function RoleList() {
     }, [])
 
     const handleOk = () => {
-        setIsModalOpen(false);
+        //console.log(currentRights)
+        setIsModalOpen(false)
+        // sync to datasource 
+        setDataSource(dataSource.map(item => {
+            if(item.id === currentId){
+                return {
+                    ...item,
+                    rights: currentRights
+                }
+            }
+            return item
+        }))
+        // patch
+        axios.patch(`http://localhost:5000/roles/${currentId}`, {
+            rights: currentRights
+        })
     };
 
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+    const onCheck = (checkedKeys, info) => {
+        //console.log('onCheck', checkedKeys, info);
+        setCurrentRights(checkedKeys.checked)
+      };
 
     return (
         <div>
@@ -114,6 +138,9 @@ export default function RoleList() {
             <Modal title="Permission Assignment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Tree
                     checkable
+                    checkedKeys={currentRights}
+                    onCheck={onCheck}
+                    checkStrictly={true}
                     treeData={rightList}
                 />
             </Modal>
