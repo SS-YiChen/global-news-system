@@ -36,7 +36,7 @@ export default function UserList() {
       "2":"regional-admin",
       "3":"region-editor",
     }
-    axios.get("http://localhost:5000/users?_expand=role")
+    axios.get("/users?_expand=role")
       .then(res => {
         const list = res.data
         setDataSource(roleObj[roleId] === "superadmin"? list: [
@@ -47,14 +47,14 @@ export default function UserList() {
   }, [roleId, region, username])
 
   useEffect(() => {
-    axios.get("http://localhost:5000/regions")
+    axios.get("/regions")
       .then(res => {
         setRegionList(res.data)
       })
   }, [])
 
   useEffect(() => {
-    axios.get("http://localhost:5000/roles")
+    axios.get("/roles")
       .then(res => {
         setRoleList(res.data)
       })
@@ -155,11 +155,11 @@ export default function UserList() {
 
   //update user state
   const handleChange = (item) => {
-    console.log(item)
+    //console.log(item)
     item.roleState = !item.roleState
     setDataSource([...dataSource])
 
-    axios.patch(`http://localhost:5000/users/${item.id}`, {
+    axios.patch(`/users/${item.id}`, {
       roleState: item.roleState
     })
   }
@@ -182,7 +182,7 @@ export default function UserList() {
   const deleteMethod = (item) => {
     //console.log(item)
     setDataSource(dataSource.filter(data => data.id !== item.id))
-    axios.delete(`http://localhost:5000/users/${item.id}`)
+    axios.delete(`/users/${item.id}`)
   }
 
   const addFormOk = () => {
@@ -195,7 +195,7 @@ export default function UserList() {
       addForm.current.resetFields()
       // post to backend, and generate ID, then set the datasource
       // this way is easier to CRUD
-      axios.post("http://localhost:5000/users", {
+      axios.post("/users", {
         ...value,
         "roleState": true,
         "default": false,
@@ -227,7 +227,7 @@ export default function UserList() {
         return item
       }))
       setIsUpdateDisabled(!isUpdateDisabled)
-      axios.patch(`http://localhost:5000/users/${current.id}`, value)
+      axios.patch(`/users/${current.id}`, value)
     })
   }
 

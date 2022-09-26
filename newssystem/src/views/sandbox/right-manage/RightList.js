@@ -21,7 +21,7 @@ export default function RightList() {
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {
-        axios.get("http://localhost:5000/rights?_embed=children")
+        axios.get("/rights?_embed=children")
             .then(res => {
                 const rightLists = res.data
                 rightLists.forEach(item => {
@@ -88,11 +88,11 @@ export default function RightList() {
         //console.log(item)
         setDataSource([...dataSource])
         if(item.grade === 1) {
-            axios.patch(`http://localhost:5000/rights/${item.id}`, {
+            axios.patch(`/rights/${item.id}`, {
                 pagepermisson:item.pagepermisson
             })
         }else{
-            axios.patch(`http://localhost:5000/children/${item.id}`, {
+            axios.patch(`/children/${item.id}`, {
                 pagepermisson:item.pagepermisson
             })
         }
@@ -120,7 +120,7 @@ export default function RightList() {
         if (item.grade === 1) {
             // here's using the filter way to update data in the table, not a state way 
             setDataSource(dataSource.filter(data => data.id !== item.id))
-            axios.delete(`http://localhost:5000/rights/${item.id}`)
+            axios.delete(`/rights/${item.id}`)
         } else {
             //console.log(item.rightId)
             let list = dataSource.filter(data => data.id === item.rightId)
@@ -128,7 +128,7 @@ export default function RightList() {
             list[0].children = list[0].children.filter(data => data.id !== item.id)
             //console.log(list, dataSource)
             setDataSource([...dataSource])
-            axios.delete(`http://localhost:5000/children/${item.id}`)
+            axios.delete(`/children/${item.id}`)
         }
     }
 

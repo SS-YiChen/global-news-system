@@ -24,7 +24,7 @@ export default function RightList() {
     }, [dataSource])
 
     const loadData =() => {
-        axios.get("http://localhost:5000/rights?_embed=children")
+        axios.get("/rights?_embed=children")
         .then(res => {
             const rightLists = res.data
             rightLists.forEach(item => {
@@ -89,7 +89,7 @@ export default function RightList() {
         //console.log(item)
         if (item.grade === 1) {
             //setDataSource(dataSource.filter(data => data.id !== item.id))
-            axios.delete(`http://localhost:5000/rights/${item.id}`)
+            axios.delete(`/rights/${item.id}`)
             // here is using state to update in the table, not a filter way.
             loadData()
         } else {
@@ -99,7 +99,7 @@ export default function RightList() {
             list[0].children = list[0].children.filter(data => data.id !== item.id)
             //console.log(list, dataSource)
             setDataSource([...dataSource])
-            axios.delete(`http://localhost:5000/children/${item.id}`)
+            axios.delete(`/children/${item.id}`)
         }
     }
 

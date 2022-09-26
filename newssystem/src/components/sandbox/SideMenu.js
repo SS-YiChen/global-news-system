@@ -65,7 +65,7 @@ export default function SideMenu() {
     const location = useLocation();
 
     useEffect( ()=> {
-        axios.get("http://localhost:5000/rights?_embed=children")
+        axios.get("/rights?_embed=children")
                 .then( res => {
                     //console.log(res.data)
                     setMenu(res.data)
